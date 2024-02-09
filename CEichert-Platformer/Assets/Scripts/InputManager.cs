@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+[RequireComponent(typeof(Rigidbody2D))]
 public class InputManager : MonoBehaviour
 {
     private PlayerInput playerInput;
@@ -13,11 +13,15 @@ public class InputManager : MonoBehaviour
     [Header("Input Settings")]
     [SerializeField] private LayerMask groundLayer;
 
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField]
+    private float
+        moveSpeed = 5f,
+        jumpForce = 500f;
 
-    private bool isGrounded = true;
+    private bool 
+        isGrounded = true;
 
-    const float RAY_DISTANCE = 0.5f;
+    const float RAY_DISTANCE = 0.6f;
 
     void Awake()
     {
@@ -38,9 +42,6 @@ public class InputManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isGrounded)
-            return;
-
         Move();
     }
     /// <summary>
@@ -48,11 +49,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     void Move()
     {
-        //Stop player from sliding
-        /*if (!playerActions.Move.IsInProgress() && rb.velocity.magnitude > 0)
-            rb.velocity -= rb.velocity;*/
-
-        rb.velocity = moveSpeed * Time.deltaTime * ReadDirection();
+        rb.velocity = new Vector2(ReadDirection().x, rb.velocity.y);
     }
     /// <summary>
     /// Gets the direction from key input
@@ -61,16 +58,29 @@ public class InputManager : MonoBehaviour
     Vector2 ReadDirection()
     {
         Vector2 direction = playerActions.Move.ReadValue<Vector2>();
-        return direction.normalized;
+        return direction.normalized * moveSpeed;
+    }
+    /// <summary>
+    /// Add force upwards
+    /// </summary>
+    /// <param name="ctx"></param>
+    void Jump(InputAction.CallbackContext ctx)
+    {
+        if (!isGrounded)
+            return;
+
+        rb.AddForce(Vector2.up * jumpForce);
     }
 
     //Enable/Disable PlayerActions load/unload
     private void OnEnable()
     {
         playerActions.Enable();
+        playerActions.Jump.performed += Jump;
     }
     private void OnDisable()
     {
         playerActions.Disable();
+        playerActions.Jump.performed -= Jump;
     }
 }
