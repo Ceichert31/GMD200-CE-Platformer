@@ -19,7 +19,8 @@ public class InputManager : MonoBehaviour
         jumpForce = 500f;
 
     private bool 
-        isGrounded = true;
+        isGrounded = true,
+        isSlowed;
 
     const float RAY_DISTANCE = 0.6f;
 
@@ -58,7 +59,9 @@ public class InputManager : MonoBehaviour
     Vector2 ReadDirection()
     {
         Vector2 direction = playerActions.Move.ReadValue<Vector2>();
-        return direction.normalized * moveSpeed;
+        direction.Normalize();
+        direction = moveSpeed * Time.unscaledDeltaTime * direction;
+        return direction;
     }
     /// <summary>
     /// Add force upwards
@@ -72,15 +75,22 @@ public class InputManager : MonoBehaviour
         rb.AddForce(Vector2.up * jumpForce);
     }
 
+    void TimeSlow(InputAction.CallbackContext ctx)
+    {
+        isSlowed = !isSlowed;
+        TimeManager.timeController?.Invoke(isSlowed);
+    }
     //Enable/Disable PlayerActions load/unload
     private void OnEnable()
     {
         playerActions.Enable();
         playerActions.Jump.performed += Jump;
+        playerActions.Time.performed += TimeSlow;
     }
     private void OnDisable()
     {
         playerActions.Disable();
         playerActions.Jump.performed -= Jump;
+        playerActions.Time.performed -= TimeSlow;
     }
 }
