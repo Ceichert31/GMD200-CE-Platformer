@@ -16,7 +16,8 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private float
         moveSpeed = 5f,
-        jumpForce = 500f;
+        jumpForce = 500f,
+        gravityForce = 300f;
 
     private bool 
         isGrounded = true,
@@ -43,6 +44,9 @@ public class InputManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Constantly apply gravity
+        rb.AddForce(gravityForce * Time.unscaledDeltaTime * Vector2.down);
+
         Move();
     }
     /// <summary>
@@ -72,7 +76,7 @@ public class InputManager : MonoBehaviour
         if (!isGrounded)
             return;
 
-        rb.AddForce(Vector2.up * jumpForce);
+        rb.AddForce(jumpForce * Time.unscaledDeltaTime * Vector2.up);
     }
 
     void TimeSlow(InputAction.CallbackContext ctx)
