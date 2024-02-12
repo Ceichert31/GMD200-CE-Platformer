@@ -6,7 +6,6 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private Vector2 direction;
 
-
     [Header("Bullet Settings")]
     [Tooltip("Speed of the bullet")]
     [SerializeField] private float bulletSpeed = 5f;
@@ -30,6 +29,14 @@ public class Bullet : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = bulletSpeed * direction;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 3)
+        {
+            //Destroy(gameObject.GetComponentInChildren<BulletBounce>());
+            Destroy(gameObject);
+        }
     }
 
 }

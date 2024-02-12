@@ -45,7 +45,8 @@ public class InputManager : MonoBehaviour
     private void FixedUpdate()
     {
         //Constantly apply gravity
-        rb.AddForce(gravityForce * Time.unscaledDeltaTime * Vector2.down);
+        /*if (!isGrounded)
+            rb.AddForce(gravityForce * Time.unscaledDeltaTime * Vector2.down);*/
 
         Move();
     }
@@ -76,7 +77,12 @@ public class InputManager : MonoBehaviour
         if (!isGrounded)
             return;
 
-        rb.AddForce(jumpForce * Time.unscaledDeltaTime * Vector2.up);
+        rb.AddForce(jumpForce * Vector2.up);
+    }
+
+    public void Bounce(float bounceForce)
+    {
+        rb.AddForce(bounceForce * Vector2.up, ForceMode2D.Impulse);
     }
 
     void TimeSlow(InputAction.CallbackContext ctx)
