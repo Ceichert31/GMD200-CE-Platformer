@@ -32,10 +32,25 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 6 || collision.gameObject.layer == 3)
+        if (collision.gameObject.layer == 3)
         {
-            //Destroy(gameObject.GetComponentInChildren<BulletBounce>());
             Destroy(gameObject);
+        }
+
+        if (collision.gameObject.layer == 6)
+        {
+            //Get direction the player is colliding with the bullet
+            Vector3 playerInstance = collision.gameObject.transform.position;
+            Vector2 direction = (transform.position - playerInstance).normalized;
+            float dot = Vector2.Dot(Vector2.up, direction);
+            //If direction is negative, bounce player
+            if (Mathf.Sign(dot) == -1)
+            {
+                InputManager inputManager = collision.gameObject.GetComponent<InputManager>();
+                inputManager.Bounce(30);
+            }
+            else
+                Health.takeDamage?.Invoke();
         }
     }
 

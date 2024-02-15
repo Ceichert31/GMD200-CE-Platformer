@@ -17,11 +17,13 @@ public class InputManager : MonoBehaviour
     private float
         moveSpeed = 5f,
         jumpForce = 500f,
-        gravityForce = 300f;
+        dashSpeed = 10f,
+        dashCooldown = 1.5f;
 
     private bool 
         isGrounded = true,
-        isSlowed;
+        isSlowed,
+        canDash = true;
 
     const float RAY_DISTANCE = 0.6f;
 
@@ -47,6 +49,8 @@ public class InputManager : MonoBehaviour
         //Constantly apply gravity
         /*if (!isGrounded)
             rb.AddForce(gravityForce * Time.unscaledDeltaTime * Vector2.down);*/
+
+        if (!canDash) return;
 
         Move();
     }
@@ -74,9 +78,8 @@ public class InputManager : MonoBehaviour
     /// <param name="ctx"></param>
     void Jump(InputAction.CallbackContext ctx)
     {
-        if (!isGrounded)
-            return;
-
+        if (!isGrounded) return;
+        
         rb.AddForce(jumpForce * Vector2.up);
     }
 
@@ -90,17 +93,27 @@ public class InputManager : MonoBehaviour
         isSlowed = !isSlowed;
         TimeManager.timeController?.Invoke(isSlowed);
     }
+
+    void Dash(InputAction.CallbackContext ctx)
+    {
+        /*canDash = false;
+        rb.velocity = ReadDirection() * dashSpeed;
+        Invoke(nameof(ResetDash), dashCooldown);*/
+    }
+    void ResetDash() => canDash = true;
     //Enable/Disable PlayerActions load/unload
     private void OnEnable()
     {
         playerActions.Enable();
         playerActions.Jump.performed += Jump;
         playerActions.Time.performed += TimeSlow;
+        playerActions.Dash.performed += Dash;
     }
     private void OnDisable()
     {
         playerActions.Disable();
         playerActions.Jump.performed -= Jump;
         playerActions.Time.performed -= TimeSlow;
+        playerActions.Dash.performed -= Dash;
     }
 }

@@ -11,24 +11,27 @@ public class Health : MonoBehaviour
     private SpriteRenderer player;
 
     private bool canDamage = true;
+    
+    public delegate void DamageHandler();
+    public static DamageHandler takeDamage;
 
     private void Start()
     {
         player = GetComponent<SpriteRenderer>();
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    void TakeDamage()
     {
-        if (!canDamage)
-            return;
+        if (!canDamage) return;
 
-        if (collision.gameObject.layer == 7)
-        {
-            canDamage = false;
-            health--;
-            StartCoroutine(DamageTaken(iFrames));
-        }
-            
+        health--;
 
+        if (health < 0)
+            Destroy(gameObject);
+
+        StartCoroutine(DamageTaken(iFrames));
+    }
+    private void Update()
+    {
         if (health <= 0)
         {
             Destroy(gameObject);
@@ -43,5 +46,14 @@ public class Health : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         canDamage = true;
+    }
+
+    private void OnEnable()
+    {
+        takeDamage += TakeDamage;
+    }
+    private void OnDisable()
+    {
+        takeDamage -= TakeDamage;
     }
 }

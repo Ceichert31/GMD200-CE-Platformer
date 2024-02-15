@@ -19,12 +19,31 @@ public class EnemyFire : MonoBehaviour
     [Tooltip("The position bullets are instantiated from")]
     [SerializeField] private Transform spawningPosition;
 
+    private Animator animator;
+
+    private float waitTime;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Fire(bulletNumber, pauseBetweenBullets, fireRate));
+        waitTime = fireRate;
+        animator = GetComponent<Animator>();
     }
+    private void Update()
+    {
+        waitTime -= Time.deltaTime;
 
+        if (waitTime <= fireRate / 2)
+            animator.SetTrigger("Charged");
+
+        if (waitTime <= 0)
+        {
+            StartCoroutine(Fire(bulletNumber, pauseBetweenBullets, fireRate));
+            waitTime = fireRate;
+            animator.SetTrigger("Shoot");
+        }
+
+    }
     IEnumerator Fire(int bulletNumber, float pauseBetweenBullets, float firingDelay)
     {
         for (int i = 0; i < bulletNumber; i++)
@@ -33,6 +52,5 @@ public class EnemyFire : MonoBehaviour
             yield return new WaitForSeconds(pauseBetweenBullets);
         }
         yield return new WaitForSeconds(firingDelay);
-        StartCoroutine(Fire(bulletNumber, pauseBetweenBullets, fireRate));
     }
 }
