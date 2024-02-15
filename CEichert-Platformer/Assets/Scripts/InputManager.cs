@@ -25,6 +25,8 @@ public class InputManager : MonoBehaviour
         isSlowed,
         canDash = true;
 
+    private Animator animator;
+
     const float RAY_DISTANCE = 0.6f;
 
     void Awake()
@@ -33,6 +35,7 @@ public class InputManager : MonoBehaviour
         playerActions = playerInput.Player;
 
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -42,6 +45,9 @@ public class InputManager : MonoBehaviour
             isGrounded = false;
         else
             isGrounded = true;
+
+        //If movement inputs are detected, set bool to true
+        animator.SetBool("Walking", playerActions.Move.IsInProgress());
     }
 
     private void FixedUpdate()
@@ -85,6 +91,9 @@ public class InputManager : MonoBehaviour
 
     public void Bounce(float bounceForce)
     {
+        //Cancle any previous momentum
+        rb.velocity = Vector2.zero;
+
         rb.AddForce(bounceForce * Vector2.up, ForceMode2D.Impulse);
     }
 

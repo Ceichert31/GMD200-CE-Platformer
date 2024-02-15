@@ -2701,6 +2701,7 @@ GameObject:
   - component: {fileID: 2018122397}
   - component: {fileID: 2018122396}
   - component: {fileID: 2018122395}
+  - component: {fileID: 2018122398}
   m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
@@ -3016,6 +3017,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &2018122398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018122393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba1417c13b0ab14f816078e6402615d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6084080058556693193
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -47,7 +47,7 @@ public class Bullet : MonoBehaviour
             if (Mathf.Sign(dot) == -1)
             {
                 InputManager inputManager = collision.gameObject.GetComponent<InputManager>();
-                inputManager.Bounce(30);
+                inputManager.Bounce(15);
             }
             else
                 Health.takeDamage?.Invoke();

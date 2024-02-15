@@ -17,13 +17,14 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<SpriteRenderer>();
+        player = GetComponentInChildren<SpriteRenderer>();
     }
     void TakeDamage()
     {
         if (!canDamage) return;
 
         health--;
+        canDamage = false;
 
         if (health < 0)
             Destroy(gameObject);
