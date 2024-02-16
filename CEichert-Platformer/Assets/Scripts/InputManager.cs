@@ -27,7 +27,9 @@ public class InputManager : MonoBehaviour
 
     private Animator animator;
 
-    const float RAY_DISTANCE = 0.6f;
+    [SerializeField] private Transform groundCheckTransform;
+
+    const float GROUND_CHECK_RADIUS = 0.1f;
 
     void Awake()
     {
@@ -40,21 +42,18 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        //Ground Check
-        if (!Physics2D.Raycast(transform.position, Vector2.down, RAY_DISTANCE, groundLayer))
-            isGrounded = false;
-        else
-            isGrounded = true;
-
         //If movement inputs are detected, set bool to true
         animator.SetBool("Walking", playerActions.Move.IsInProgress());
+        animator.SetBool("Grounded", isGrounded);
     }
 
     private void FixedUpdate()
     {
-        //Constantly apply gravity
-        /*if (!isGrounded)
-            rb.AddForce(gravityForce * Time.unscaledDeltaTime * Vector2.down);*/
+        //Ground Check
+        if (Physics2D.OverlapCircle(groundCheckTransform.position, GROUND_CHECK_RADIUS, groundLayer))
+            isGrounded = true;
+        else
+            isGrounded = false;
 
         if (!canDash) return;
 

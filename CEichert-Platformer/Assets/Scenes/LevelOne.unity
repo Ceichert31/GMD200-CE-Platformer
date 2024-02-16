@@ -485,6 +485,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba194fc25c98629409074ea667b5965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &527352227 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5515615040489777805, guid: 77cac4f8b4e84f7468dd1efee8b826c5, type: 3}
+  m_PrefabInstance: {fileID: 6084080058556693193}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &561634405
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,6 +3046,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6358163210811828004, guid: 77cac4f8b4e84f7468dd1efee8b826c5, type: 3}
+      propertyPath: groundCheckTransform
+      value: 
+      objectReference: {fileID: 527352227}
     - target: {fileID: 8284674490534393450, guid: 77cac4f8b4e84f7468dd1efee8b826c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30
