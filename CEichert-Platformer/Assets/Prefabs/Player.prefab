@@ -115,7 +115,9 @@ MonoBehaviour:
     m_Bits: 8
   moveSpeed: 270
   jumpForce: 800
-  groundStompForce: 2500
+  groundStompForce: 1500
+  jumpBoostWindow: 0.05
+  jumpBoostCooldown: 1.5
   groundCheckTransform: {fileID: 5515615040489777805}
 --- !u!114 &4246587750689906810
 MonoBehaviour:

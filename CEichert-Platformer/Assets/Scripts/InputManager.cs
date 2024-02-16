@@ -17,11 +17,15 @@ public class InputManager : MonoBehaviour
     private float
         moveSpeed = 5f,
         jumpForce = 500f,
-        groundStompForce = 500f;
+        groundStompForce = 500f,
+        jumpBoostWindow = 0.5f,
+        jumpBoostCooldown = 1.5f;
 
     private bool
         isGrounded = true,
-        isSlowed;
+        isSlowed,
+        jumpWindow,
+        canJumpBoost = true;
 
     private Animator animator;
 
@@ -79,6 +83,15 @@ public class InputManager : MonoBehaviour
     void Jump(InputAction.CallbackContext ctx)
     {
         if (!isGrounded) return;
+
+        if (jumpWindow)
+        {
+            rb.AddForce(jumpForce * Vector2.up / 2);
+
+            canJumpBoost = false;
+            Invoke(nameof(ResetJumpBoostCooldown), jumpBoostCooldown);
+        }
+            
         
         rb.AddForce(jumpForce * Vector2.up);
     }
@@ -102,8 +115,17 @@ public class InputManager : MonoBehaviour
         if (!isGrounded)
         {
             rb.AddForce(groundStompForce * Time.unscaledDeltaTime * Vector2.down, ForceMode2D.Impulse);
+
+            if (canJumpBoost)
+            {
+                jumpWindow = true;
+                Invoke(nameof(ResetWindow), 0.5f);
+            }
+            
         }
     }
+    void ResetWindow() => jumpWindow = false;
+    void ResetJumpBoostCooldown() => canJumpBoost = true;
     //Enable/Disable PlayerActions load/unload
     private void OnEnable()
     {
