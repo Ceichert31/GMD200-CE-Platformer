@@ -17,13 +17,11 @@ public class InputManager : MonoBehaviour
     private float
         moveSpeed = 5f,
         jumpForce = 500f,
-        dashSpeed = 10f,
-        dashCooldown = 1.5f;
+        groundStompForce = 500f;
 
-    private bool 
+    private bool
         isGrounded = true,
-        isSlowed,
-        canDash = true;
+        isSlowed;
 
     private Animator animator;
 
@@ -54,9 +52,6 @@ public class InputManager : MonoBehaviour
             isGrounded = true;
         else
             isGrounded = false;
-
-        if (!canDash) return;
-
         Move();
     }
     /// <summary>
@@ -102,26 +97,26 @@ public class InputManager : MonoBehaviour
         TimeManager.timeController?.Invoke(isSlowed);
     }
 
-    void Dash(InputAction.CallbackContext ctx)
+    void GroundStomp(InputAction.CallbackContext ctx)
     {
-        /*canDash = false;
-        rb.velocity = ReadDirection() * dashSpeed;
-        Invoke(nameof(ResetDash), dashCooldown);*/
+        if (!isGrounded)
+        {
+            rb.AddForce(groundStompForce * Time.unscaledDeltaTime * Vector2.down, ForceMode2D.Impulse);
+        }
     }
-    void ResetDash() => canDash = true;
     //Enable/Disable PlayerActions load/unload
     private void OnEnable()
     {
         playerActions.Enable();
         playerActions.Jump.performed += Jump;
         playerActions.Time.performed += TimeSlow;
-        playerActions.Dash.performed += Dash;
+        playerActions.Dash.performed += GroundStomp;
     }
     private void OnDisable()
     {
         playerActions.Disable();
         playerActions.Jump.performed -= Jump;
         playerActions.Time.performed -= TimeSlow;
-        playerActions.Dash.performed -= Dash;
+        playerActions.Dash.performed -= GroundStomp;
     }
 }
