@@ -11,7 +11,10 @@ public class Health : MonoBehaviour
     private SpriteRenderer player;
 
     private bool canDamage = true;
-    
+
+    [Header("Current Scene")]
+    [SerializeField] private int currentScene;
+
     public delegate void DamageHandler();
     public static DamageHandler takeDamage;
 
@@ -27,18 +30,10 @@ public class Health : MonoBehaviour
         canDamage = false;
 
         if (health < 0)
-            Destroy(gameObject);
+            SceneLoader.load?.Invoke(currentScene);
 
         StartCoroutine(DamageTaken(iFrames));
     }
-    private void Update()
-    {
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
-
     IEnumerator DamageTaken(int iFrames)
     {
         for (int i = 0; i < iFrames; i++)

@@ -76,6 +76,17 @@ public class InputManager : MonoBehaviour
         direction = moveSpeed * Time.unscaledDeltaTime * direction;
         return direction;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+            transform.SetParent(collision.gameObject.transform, true);
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+            transform.SetParent(null, true);
+    }
     /// <summary>
     /// Add force upwards
     /// </summary>

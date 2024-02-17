@@ -48,7 +48,8 @@ public class EnemyFire : MonoBehaviour
     {
         for (int i = 0; i < bulletNumber; i++)
         {
-            Instantiate(bullet, spawningPosition.transform.position, bullet.transform.rotation);
+            Bullet instance = Instantiate(bullet, spawningPosition.transform.position, spawningPosition.rotation).GetComponent<Bullet>();
+            instance.direction = -spawningPosition.right;
             yield return new WaitForSeconds(pauseBetweenBullets);
         }
         yield return new WaitForSeconds(firingDelay);

@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private Vector2 direction;
+    public Vector2 direction;
 
     [Header("Bullet Settings")]
     [Tooltip("Speed of the bullet")]
@@ -47,7 +47,7 @@ public class Bullet : MonoBehaviour
             if (Mathf.Sign(dot) == -1)
             {
                 InputManager inputManager = collision.gameObject.GetComponent<InputManager>();
-                inputManager.Bounce(15);
+                inputManager.Bounce(17);
             }
             else
                 Health.takeDamage?.Invoke();
