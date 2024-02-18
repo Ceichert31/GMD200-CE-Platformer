@@ -44,11 +44,13 @@ public class TimeManager : MonoBehaviour
 
         if (activate)
             StartCoroutine(SlowTime(1));
-        else 
-            StartCoroutine(NormalTime(1));
+        else
+            StartCoroutine(NormalTime(0));
     }
     IEnumerator SlowTime(float duration)
     {
+        GlobalVolumeController.timeEffects?.Invoke();
+        CameraFollow.zoom?.Invoke(true);
         while (duration >= 0)
         {
             duration -= Time.unscaledDeltaTime;
@@ -60,6 +62,8 @@ public class TimeManager : MonoBehaviour
 
     IEnumerator NormalTime(float duration)
     {
+        GlobalVolumeController.timeEffects?.Invoke();
+        CameraFollow.zoom?.Invoke(false);
         while (duration <= 1)
         {
             duration += Time.unscaledDeltaTime;
