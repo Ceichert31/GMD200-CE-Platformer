@@ -4,10 +4,15 @@ using UnityEngine;
 using TMPro;
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI
+        timeText,
+        healthText;
 
     public delegate void SetTime(float time);
     public static SetTime setTimeText;
+
+    public delegate void UpdateHealth(int health);
+    public static UpdateHealth updateHealth;
 
     /// <summary>
     /// Set the current time value to UI
@@ -18,12 +23,19 @@ public class UIManager : MonoBehaviour
         timeText.text = Mathf.FloorToInt(time).ToString();
     }
 
+    void UpdateHealthUI(int health)
+    {
+        healthText.text = health.ToString();
+    }
+
     private void OnEnable()
     {
         setTimeText += SetTimeText;
+        updateHealth += UpdateHealthUI;
     }
     private void OnDisable()
     {
         setTimeText -= SetTimeText;
+        updateHealth -= UpdateHealthUI;
     }
 }

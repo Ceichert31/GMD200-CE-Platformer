@@ -27,9 +27,10 @@ public class Health : MonoBehaviour
         if (!canDamage) return;
 
         health--;
+        UIManager.updateHealth?.Invoke(health);
         canDamage = false;
 
-        if (health < 0)
+        if (health <= 0)
             SceneLoader.load?.Invoke(currentScene);
 
         StartCoroutine(DamageTaken(iFrames));
