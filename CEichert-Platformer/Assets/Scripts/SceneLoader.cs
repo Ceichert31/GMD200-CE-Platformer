@@ -8,9 +8,13 @@ public class SceneLoader : MonoBehaviour
     public delegate void loadScene(int scene);
     public static loadScene load;
 
-    void LoadScene(int scene)
+    public void LoadScene(int scene)
     {
         SceneManager.LoadScene(scene);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
     private void OnEnable()
     {
