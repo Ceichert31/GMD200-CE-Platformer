@@ -13,6 +13,12 @@ public class TimeManager : MonoBehaviour
     public delegate void TimeController(bool activate);
     public static TimeController timeController;
 
+    private void Awake()
+    {
+        StopAllCoroutines();
+        timePoints = 10;
+    }
+
     private void Update()
     {
         //If time is normal, add to timepoints
