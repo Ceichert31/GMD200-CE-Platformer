@@ -51,6 +51,7 @@ public class TimeManager : MonoBehaviour
     {
         GlobalVolumeController.timeEffects?.Invoke();
         CameraFollow.zoom?.Invoke(true);
+        SoundManager.soundManager?.Invoke(3);
         while (duration >= 0)
         {
             duration -= Time.unscaledDeltaTime;

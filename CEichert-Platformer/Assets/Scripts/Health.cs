@@ -12,9 +12,6 @@ public class Health : MonoBehaviour
 
     private bool canDamage = true;
 
-    [Header("Current Scene")]
-    [SerializeField] private int currentScene;
-
     public delegate void DamageHandler();
     public static DamageHandler takeDamage;
 
@@ -28,10 +25,11 @@ public class Health : MonoBehaviour
 
         health--;
         UIManager.updateHealth?.Invoke(health);
+        SoundManager.soundManager?.Invoke(0);
         canDamage = false;
 
         if (health <= 0)
-            SceneLoader.load?.Invoke(currentScene);
+            SceneLoader.reloadScene?.Invoke();
 
         StartCoroutine(DamageTaken(iFrames));
     }

@@ -25,7 +25,8 @@ public class InputManager : MonoBehaviour
         isGrounded = true,
         isSlowed,
         jumpWindow,
-        canJumpBoost = true;
+        canJumpBoost = true,
+        groundSlamSFX;
 
     private Animator animator;
 
@@ -81,6 +82,12 @@ public class InputManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MovingPlatform"))
             transform.SetParent(collision.gameObject.transform, true);
+
+        if (groundSlamSFX)
+        {
+            groundSlamSFX = false;
+            SoundManager.soundManager?.Invoke(2);
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -102,15 +109,19 @@ public class InputManager : MonoBehaviour
             canJumpBoost = false;
             Invoke(nameof(ResetJumpBoostCooldown), jumpBoostCooldown);
         }
-            
+
+        //Play jump sound
+        SoundManager.soundManager?.Invoke(1);
         
         rb.AddForce(jumpForce * Vector2.up);
     }
 
     public void Bounce(float bounceForce)
     {
-        //Cancle any previous momentum
+        //Cancel any previous momentum
         rb.velocity = Vector2.zero;
+
+        SoundManager.soundManager?.Invoke(4);
 
         rb.AddForce(bounceForce * Vector2.up, ForceMode2D.Impulse);
     }
@@ -127,14 +138,17 @@ public class InputManager : MonoBehaviour
         {
             rb.AddForce(groundStompForce * Time.unscaledDeltaTime * Vector2.down, ForceMode2D.Impulse);
 
+            groundSlamSFX = true;
+
             if (canJumpBoost)
             {
                 jumpWindow = true;
                 Invoke(nameof(ResetWindow), 0.5f);
             }
-            
         }
     }
+
+    void RestartLevel(InputAction.CallbackContext ctx) => SceneLoader.reloadScene?.Invoke();
     void ResetWindow() => jumpWindow = false;
     void ResetJumpBoostCooldown() => canJumpBoost = true;
     //Enable/Disable PlayerActions load/unload
@@ -144,6 +158,7 @@ public class InputManager : MonoBehaviour
         playerActions.Jump.performed += Jump;
         playerActions.Time.performed += TimeSlow;
         playerActions.Dash.performed += GroundStomp;
+        playerActions.Restart.performed += RestartLevel;
     }
     private void OnDisable()
     {
@@ -151,5 +166,6 @@ public class InputManager : MonoBehaviour
         playerActions.Jump.performed -= Jump;
         playerActions.Time.performed -= TimeSlow;
         playerActions.Dash.performed -= GroundStomp;
+        playerActions.Restart.performed -= RestartLevel;
     }
 }
