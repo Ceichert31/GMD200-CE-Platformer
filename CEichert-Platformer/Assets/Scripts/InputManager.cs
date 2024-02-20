@@ -86,7 +86,7 @@ public class InputManager : MonoBehaviour
         if (groundSlamSFX)
         {
             groundSlamSFX = false;
-            SoundManager.soundManager?.Invoke(2);
+            SoundManager.soundManager?.Invoke(SoundID.GroundSlam);
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -110,8 +110,7 @@ public class InputManager : MonoBehaviour
             Invoke(nameof(ResetJumpBoostCooldown), jumpBoostCooldown);
         }
 
-        //Play jump sound
-        SoundManager.soundManager?.Invoke(1);
+        SoundManager.soundManager?.Invoke(SoundID.Jump);
         
         rb.AddForce(jumpForce * Vector2.up);
     }
@@ -121,7 +120,7 @@ public class InputManager : MonoBehaviour
         //Cancel any previous momentum
         rb.velocity = Vector2.zero;
 
-        SoundManager.soundManager?.Invoke(4);
+        SoundManager.soundManager?.Invoke(SoundID.Bounce);
 
         rb.AddForce(bounceForce * Vector2.up, ForceMode2D.Impulse);
     }

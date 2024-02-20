@@ -25,7 +25,7 @@ public class Health : MonoBehaviour
 
         health--;
         UIManager.updateHealth?.Invoke(health);
-        SoundManager.soundManager?.Invoke(0);
+        SoundManager.soundManager?.Invoke(SoundID.Hurt);
         canDamage = false;
 
         if (health <= 0)

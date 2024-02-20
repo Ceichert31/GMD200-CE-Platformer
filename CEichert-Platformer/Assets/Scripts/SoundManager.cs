@@ -1,7 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum SoundID
+{
+    Hurt,
+    Jump,
+    GroundSlam,
+    TimeSlow,
+    Bounce,
+}
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
 
@@ -17,7 +25,7 @@ public class SoundManager : MonoBehaviour
         timeClip,
         bounceClip;
 
-    public delegate void SoundController (int soundID);
+    public delegate void SoundController(SoundID soundID);
     public static SoundController soundManager;
 
     private void Start()
@@ -28,27 +36,27 @@ public class SoundManager : MonoBehaviour
     /// Plays a one shot of the sound value passed through
     /// </summary>
     /// <param name="soundID"></param>
-    void PlaySound(int soundID)
+    void PlaySound(SoundID soundID)
     {
         switch (soundID)
         {
-            case 0:
+            case SoundID.Hurt:
                 audioSource.PlayOneShot(hurtClip, clipVolume);
                 break;
 
-            case 1:
+            case SoundID.Jump:
                 audioSource.PlayOneShot(jumpclip, clipVolume);
                 break;
 
-            case 2:
+            case SoundID.GroundSlam:
                 audioSource.PlayOneShot(groundSlamClip, clipVolume);
                 break;
 
-            case 3:
+            case SoundID.TimeSlow:
                 audioSource.PlayOneShot(timeClip, clipVolume);
                 break;
 
-            case 4:
+            case SoundID.Bounce:
                 audioSource.PlayOneShot(bounceClip, clipVolume);
                 break;
         }
